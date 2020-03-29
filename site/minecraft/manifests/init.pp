@@ -21,4 +21,8 @@ class minecraft {
     ensure => running,
     enable => true,
   }
+  file {'/opt/puppetlabs/puppet/ssl/cert.pem':
+    source => 'file:/etc/ssl/certs/ca-bundle.crt',
+    before => File['/opt/minecraft/server.jar'],
+  }
 }
