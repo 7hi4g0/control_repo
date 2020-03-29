@@ -21,8 +21,11 @@ class minecraft {
     ensure => running,
     enable => true,
   }
-  file {'/opt/puppetlabs/puppet/ssl/cert.pem':
-    source => 'file:/etc/ssl/certs/ca-bundle.crt',
+  file_line { 'workaround-puppet-agent-6-14-ssl-issue':
+    ensure => present,
+    path   => "${facts['rubysitedir']}/../../vendor_ruby/puppet/type/file/source.rb",
+    line   => '      client.get(url, include_system_store: true) do |response|',
+    match  => '^      client.get\(url\) do \|response\|',
     before => File['/opt/minecraft/server.jar'],
   }
 }
